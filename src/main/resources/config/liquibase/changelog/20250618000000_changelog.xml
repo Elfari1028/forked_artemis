@@ -1,0 +1,39 @@
+<?xml version="1.1" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+    <!--
+        Added exercise_review table for storing reviews of exercise versions
+    -->
+    <changeSet id="20250618000000-1" author="artemis">
+        <createTable tableName="exercise_review">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="exercise_version_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_exercise_review_exercise_version" references="exercise_version(id)" deleteCascade="true"/>
+            </column>
+            <column name="author_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_exercise_review_author" references="jhi_user(id)"/>
+            </column>
+            <column name="submitted_at" type="timestamp with time zone" nullable="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <createIndex tableName="exercise_review" indexName="idx_exercise_review_exercise_version_id">
+            <column name="exercise_version_id"/>
+        </createIndex>
+        
+        <createIndex tableName="exercise_review" indexName="idx_exercise_review_author_id">
+            <column name="author_id"/>
+        </createIndex>
+        
+        <!-- Created and last modified dates are handled by AbstractAuditingEntity and will be indexed by the base schema -->
+        
+        <rollback>
+            <dropTable tableName="exercise_review"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

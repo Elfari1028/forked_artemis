@@ -1,0 +1,32 @@
+<?xml version="1.1" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+    <!--
+        Added exercise_version table for tracking exercise problem statement history
+    -->
+    <changeSet id="20250617000000-1" author="artemis">
+        <createTable tableName="exercise_version">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="exercise_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_exercise_version_exercise" references="exercise(id)" deleteCascade="true"/>
+            </column>
+            <column name="problem_statement" type="text"/>
+        </createTable>
+        <createIndex tableName="exercise_version" indexName="idx_exercise_version_exercise_id">
+            <column name="exercise_id"/>
+        </createIndex>
+        <!-- Created date is handled by AbstractAuditingEntity and will be indexed by the base schema -->
+        <sql>
+            INSERT INTO jhi_authority (name) VALUES ('ROLE_INSTRUCTOR');
+            INSERT INTO jhi_authority (name) VALUES ('ROLE_TA');
+            INSERT INTO jhi_authority (name) VALUES ('ROLE_USER');
+        </sql>
+        <rollback>
+            <dropTable tableName="exercise_version"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

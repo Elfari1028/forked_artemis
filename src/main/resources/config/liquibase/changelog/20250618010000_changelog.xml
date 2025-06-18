@@ -1,0 +1,41 @@
+<?xml version="1.1" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+    <!--
+        Added exercise_review_comment table for storing comments on exercise reviews
+    -->
+    <changeSet id="20250618010000-1" author="artemis">
+        <createTable tableName="exercise_review_comment">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="review_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_exercise_review_comment_review" references="exercise_review(id)" deleteCascade="true"/>
+            </column>
+            <column name="component_type" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="path" type="varchar(500)"/>
+            <column name="line_number" type="integer"/>
+            <column name="body" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="resolved_at" type="timestamp with time zone"/>
+            <column name="updated_at" type="timestamp with time zone"/>
+        </createTable>
+        
+        <createIndex tableName="exercise_review_comment" indexName="idx_exercise_review_comment_review_id">
+            <column name="review_id"/>
+        </createIndex>
+        
+        <createIndex tableName="exercise_review_comment" indexName="idx_exercise_review_comment_component_type">
+            <column name="component_type"/>
+        </createIndex>
+        
+        <rollback>
+            <dropTable tableName="exercise_review_comment"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
