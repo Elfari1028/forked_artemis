@@ -1,13 +1,15 @@
 package de.tum.cit.aet.artemis.quiz.domain;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import de.tum.cit.aet.artemis.exercise.domain.ExerciseVersion;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import de.tum.cit.aet.artemis.exercise.domain.ExerciseVersion;
+
 @Entity
-@DiscriminatorValue(value="Q")
+@DiscriminatorValue(value = "Q")
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class QuizExerciseVersion extends ExerciseVersion {
 
