@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="20250626094500-1" author="Alphar">
+        <createTable tableName="exercise_version">
+            <!-- Common fields -->
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="discriminator" type="varchar(31)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="exercise_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="difficulty" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="max_points" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_date" type="timestamp"/>
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+
+            <!-- QuizExerciseVersion specific fields -->
+            <column name="quiz_mode" type="varchar(50)"/>
+            <column name="randomize_question_order" type="boolean"/>
+            <column name="allowed_number_of_attempts" type="integer"/>
+            <column name="duration" type="integer"/>
+            <column name="is_visible_before_start" type="boolean"/>
+            <column name="is_open_for_practice" type="boolean"/>
+            <column name="is_planned_to_start" type="boolean"/>
+            <column name="release_date" type="timestamp"/>
+            <column name="start_date" type="timestamp"/>
+            <column name="end_date" type="timestamp"/>
+
+        </createTable>
+
+        <!-- Create indexes -->
+        <createIndex indexName="idx_exercise_version_created_date"
+                     tableName="exercise_version">
+            <column name="created_date"/>
+        </createIndex>
+
+        <createIndex indexName="idx_exercise_version_start_date"
+                     tableName="exercise_version">
+            <column name="start_date"/>
+        </createIndex>
+
+        <createIndex indexName="idx_exercise_version_end_date"
+                     tableName="exercise_version">
+            <column name="end_date"/>
+        </createIndex>
+
+        <!-- Add foreign key constraints -->
+        <addForeignKeyConstraint baseColumnNames="author_id"
+                                baseTableName="exercise_version"
+                                constraintName="fk_exercise_version_author_id"
+                                referencedColumnNames="id"
+                                referencedTableName="jhi_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="exercise_id"
+                                baseTableName="exercise_version"
+                                constraintName="fk_exercise_version_exercise_id"
+                                referencedColumnNames="id"
+                                referencedTableName="exercise"/>
+    </changeSet>
+
+
+</databaseChangeLog>
