@@ -1,8 +1,9 @@
 package de.tum.cit.aet.artemis.exercise.domain;
 
-import de.tum.cit.aet.artemis.core.domain.DomainObject;
-import de.tum.cit.aet.artemis.core.domain.User;
+import java.time.ZonedDateTime;
+
 import jakarta.annotation.Nullable;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
@@ -14,20 +15,23 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.time.ZonedDateTime;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Table;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import de.tum.cit.aet.artemis.core.domain.AbstractAuditingEntity;
+import de.tum.cit.aet.artemis.core.domain.User;
 
 @Entity
 @Table(name = "exercise_version")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "discriminator", discriminatorType = DiscriminatorType.STRING)
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@DiscriminatorValue(value="E")
-public class ExerciseVersion extends DomainObject {
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+@DiscriminatorValue(value = "E")
+public class ExerciseVersion extends AbstractAuditingEntity {
+
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinColumn(name = "exercise_id")
     private Exercise exercise;
 
@@ -56,6 +60,7 @@ public class ExerciseVersion extends DomainObject {
     @Column(name = "due_date")
     @Nullable
     private ZonedDateTime dueDate;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "difficulty")
     private DifficultyLevel difficulty;
@@ -156,8 +161,5 @@ public class ExerciseVersion extends DomainObject {
     public void setBonusPoints(Double bonusPoints) {
         this.bonusPoints = bonusPoints;
     }
-
-
-
 
 }
